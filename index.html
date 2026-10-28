@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KalaSetu AI - Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-emerald-800 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-hands-holding-child text-2xl text-amber-400"></i>
+      <h1 class="text-xl font-bold tracking-wide">KalaSetu <span class="text-amber-400">AI</span></h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <select class="bg-emerald-700 text-sm py-1 px-2 rounded border border-emerald-600 text-white focus:outline-none">
+        <option>తెలుగు</option>
+        <option>English</option>
+        <option>हिंदी</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Role Toggle Bar -->
+  <div class="bg-emerald-900 p-2 flex justify-center border-t border-emerald-700">
+    <div class="bg-emerald-950 p-1 rounded-full flex gap-1 border border-emerald-800">
+      <button id="btnBuyer" onclick="switchMode('buyer')" class="px-5 py-1.5 rounded-full text-sm font-semibold transition-all bg-amber-500 text-gray-900 shadow">
+        <i class="fa-solid fa-store mr-1"></i> Buyer Mode
+      </button>
+      <button id="btnArtisan" onclick="switchMode('artisan')" class="px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-emerald-200 hover:text-white">
+        <i class="fa-solid fa-palette mr-1"></i> Artisan Mode
+      </button>
+    </div>
+  </div>
+
+  <main class="max-w-md mx-auto p-4 pb-20">
+
+    <!-- BUYER VIEW -->
+    <div id="buyerScreen" class="space-y-6">
+      <!-- Search & Voice -->
+      <div class="relative">
+        <input type="text" placeholder="Search crafts or regions..." class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-emerald-600 focus:outline-none text-sm">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-gray-400"></i>
+        <button class="absolute right-2 top-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 p-1.5 rounded-lg">
+          <i class="fa-solid fa-microphone text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Interactive Map Banner -->
+      <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 shadow-sm">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-map-location-dot text-amber-600"></i> Regional Craft Clusters
+          </h2>
+          <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-medium">Live Map</span>
+        </div>
+        <div class="bg-amber-100/60 rounded-xl p-4 text-center border border-dashed border-amber-300 relative overflow-hidden">
+          <p class="text-xs text-amber-900 mb-2 font-medium">Select a cluster to explore local artisans:</p>
+          <div class="flex justify-center gap-2 flex-wrap">
+            <button onclick="filterCluster('Kondapalli')" class="bg-white text-emerald-800 text-xs px-3 py-1.5 rounded-lg shadow-sm border border-amber-300 font-semibold hover:bg-emerald-600 hover:text-white">📍 Kondapalli</button>
+            <button onclick="filterCluster('Pochampally')" class="bg-white text-emerald-800 text-xs px-3 py-1.5 rounded-lg shadow-sm border border-amber-300 font-semibold hover:bg-emerald-600 hover:text-white">📍 Pochampally</button>
+            <button onclick="filterCluster('Etikoppaka')" class="bg-white text-emerald-800 text-xs px-3 py-1.5 rounded-lg shadow-sm border border-amber-300 font-semibold hover:bg-emerald-600 hover:text-white">📍 Etikoppaka</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="relative">
+          <img id="productImg" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80" class="w-full h-48 object-cover">
+          <span class="absolute top-3 left-3 bg-emerald-800/90 text-amber-300 text-xs px-2.5 py-1 rounded-full font-semibold border border-amber-400/40 backdrop-blur-sm">
+            <i class="fa-solid fa-certificate text-amber-400 mr-1"></i> GI Certified
+          </span>
+        </div>
+        <div class="p-4 space-y-3">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 id="productTitle" class="font-bold text-gray-900">Handmade Wooden Craft</h3>
+              <p id="productCluster" class="text-xs text-gray-500"><i class="fa-solid fa-location-dot text-amber-600"></i> Kondapalli Village, AP</p>
+            </div>
+            <span class="text-lg font-bold text-emerald-800">₹1,200</span>
+          </div>
+
+          <!-- Maker Voice Story Player -->
+          <div class="bg-emerald-50 rounded-xl p-2.5 border border-emerald-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs shadow">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <div>
+                <p class="text-xs font-semibold text-emerald-950">Maker's Audio Story</p>
+                <p class="text-[10px] text-emerald-700">Ramulu (Master Craftsman)</p>
+              </div>
+            </div>
+            <span class="text-[10px] text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full font-mono">0:14</span>
+          </div>
+
+          <!-- Transparent Price Breakdown -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] font-medium text-gray-600">
+              <span>Fair Price Breakdown:</span>
+              <span class="text-emerald-700 font-bold">85% Direct to Artisan</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden flex">
+              <div class="bg-emerald-600 h-full" style="width: 85%"></div>
+              <div class="bg-amber-500 h-full" style="width: 10%"></div>
+              <div class="bg-gray-400 h-full" style="width: 5%"></div>
+            </div>
+          </div>
+
+          <button class="w-full bg-emerald-800 text-white font-semibold py-2.5 rounded-xl shadow-sm hover:bg-emerald-900 transition-colors flex items-center justify-center gap-2 text-sm">
+            <i class="fa-solid fa-bag-shopping"></i> Buy Direct from Maker
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTISAN VIEW -->
+    <div id="artisanScreen" class="space-y-5 hidden">
+      <!-- Voice Onboarding Banner -->
+      <div class="bg-emerald-900 text-white p-4 rounded-2xl shadow-sm text-center space-y-2">
+        <p class="text-amber-300 font-bold text-sm">వస్తువు అమ్మడానికి ఒక్క ఫోటో తీయండి</p>
+        <p class="text-xs text-emerald-200">Snap a photo and speak in your language. AI creates your listing instantly.</p>
+      </div>
+
+      <!-- Step 1: Camera UI -->
+      <div id="uploadStep1" class="bg-white p-4 rounded-2xl border border-gray-200 text-center space-y-4">
+        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center bg-gray-50">
+          <i class="fa-solid fa-camera text-4xl text-emerald-700 mb-2"></i>
+          <p class="text-xs font-semibold text-gray-600">Take a photo of your craft</p>
+        </div>
+        <button onclick="simulateAIScan()" class="w-full bg-emerald-700 text-white font-bold py-3 rounded-xl shadow hover:bg-emerald-800 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-circle-dot text-red-400 animate-pulse"></i> Snap & Auto-Enhance with AI
+        </button>
+      </div>
+
+      <!-- Step 2: AI Transformation Preview (Hidden initially) -->
+      <div id="uploadStep2" class="bg-white p-4 rounded-2xl border border-gray-200 space-y-4 hidden">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h3 class="font-bold text-sm text-gray-800">AI Studio Transformation</h3>
+          <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Processed</span>
+        </div>
+
+        <!-- Before & After Comparison -->
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div>
+            <p class="text-[10px] text-gray-500 font-semibold mb-1">RAW PHOTO</p>
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80" class="rounded-lg h-28 w-full object-cover grayscale opacity-80 border">
+          </div>
+          <div>
+            <p class="text-[10px] text-emerald-700 font-semibold mb-1">AI STUDIO READY</p>
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80" class="rounded-lg h-28 w-full object-cover border-2 border-emerald-500 shadow-md">
+          </div>
+        </div>
+
+        <!-- Auto generated details -->
+        <div class="bg-gray-50 p-3 rounded-xl space-y-2 border border-gray-200">
+          <div>
+            <label class="text-[10px] text-gray-400 uppercase font-bold">Auto Title</label>
+            <input type="text" value="Authentic Kondapalli Wooden Toy" class="w-full text-xs font-bold bg-white p-1.5 rounded border border-gray-200">
+          </div>
+          <div class="flex gap-2">
+            <div class="w-1/2">
+              <label class="text-[10px] text-gray-400 uppercase font-bold">Suggested Price</label>
+              <input type="text" value="₹ 1,200" class="w-full text-xs font-bold bg-white p-1.5 rounded border border-gray-200 text-emerald-700">
+            </div>
+            <div class="w-1/2">
+              <label class="text-[10px] text-gray-400 uppercase font-bold">Detected Craft</label>
+              <input type="text" value="Wood Carving" class="w-full text-xs font-bold bg-white p-1.5 rounded border border-gray-200">
+            </div>
+          </div>
+        </div>
+
+        <!-- Voice story input button -->
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <button class="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow animate-bounce">
+              <i class="fa-solid fa-microphone text-base"></i>
+            </button>
+            <div>
+              <p class="text-xs font-bold text-amber-900">నొక్కి మాట్లాడండి</p>
+              <p class="text-[10px] text-amber-700">Hold to add voice note story</p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="resetArtisanFlow()" class="w-full bg-emerald-800 text-white font-bold py-2.5 rounded-xl shadow hover:bg-emerald-900 transition-all text-sm">
+          <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Publish to KalaSetu Marketplace
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchMode(mode) {
+      const buyerBtn = document.getElementById('btnBuyer');
+      const artisanBtn = document.getElementById('btnArtisan');
+      const buyerScreen = document.getElementById('buyerScreen');
+      const artisanScreen = document.getElementById('artisanScreen');
+
+      if (mode === 'buyer') {
+        buyerBtn.className = "px-5 py-1.5 rounded-full text-sm font-semibold transition-all bg-amber-500 text-gray-900 shadow";
+        artisanBtn.className = "px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-emerald-200 hover:text-white";
+        buyerScreen.classList.remove('hidden');
+        artisanScreen.classList.add('hidden');
+      } else {
+        artisanBtn.className = "px-5 py-1.5 rounded-full text-sm font-semibold transition-all bg-amber-500 text-gray-900 shadow";
+        buyerBtn.className = "px-5 py-1.5 rounded-full text-sm font-semibold transition-all text-emerald-200 hover:text-white";
+        artisanScreen.classList.remove('hidden');
+        buyerScreen.classList.add('hidden');
+      }
+    }
+
+    function simulateAIScan() {
+      document.getElementById('uploadStep1').classList.add('hidden');
+      document.getElementById('uploadStep2').classList.remove('hidden');
+    }
+
+    function resetArtisanFlow() {
+      alert("Product published successfully to KalaSetu Marketplace!");
+      document.getElementById('uploadStep1').classList.remove('hidden');
+      document.getElementById('uploadStep2').classList.add('hidden');
+      switchMode('buyer');
+    }
+
+    function filterCluster(name) {
+      document.getElementById('productCluster').innerHTML = `<i class="fa-solid fa-location-dot text-amber-600"></i> ${name} Village Cluster`;
+      document.getElementById('productTitle').innerText = `${name} Handcrafted Item`;
+    }
+  </script>
+</body>
+</html>
